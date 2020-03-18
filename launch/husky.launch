@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+    
+<!--    <env name="HUSKY_GAZEBO_DESCRIPTION"
+        value="$(find husky_gazebo)/urdf/description.gazebo.xacro"/> -->
+    <arg name="world_name"
+        default="$(find husky_highlevel_controller)worlds/singlePillar.world"/>
+    <arg name="laser_enabled" default="true"/>
+    <arg name="kinect_enabled" default="false"/>
+    <arg name="nokey" default="true"/>
+
+    <include file="$(find husky_gazebo)/launch/husky_empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
+        <arg name="laser_enabled" value="$(arg laser_enabled)"/>
+        <arg name="kinect_enabled" value="$(arg kinect_enabled)"/>
+    </include>
+
+    <node name="keyboard" pkg="teleop_twist_keyboard"
+        type="teleop_twist_keyboard.py" unless="$(arg nokey)"/>
+    <node name="high_control" pkg="husky_highlevel_controller"
+        type="husky_highlevel_controller_node" output="screen">
+        <rosparam command="load"
+            file="$(find husky_highlevel_controller)/config/husky_control.yaml"/>
+    </node>
+    <node name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find husky_highlevel_controller)/rviz/exercise2.rviz"/>
+
+</launch>
+
