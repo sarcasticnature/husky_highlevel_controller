@@ -22,7 +22,21 @@ void HuskyHighlevelController::readParameters_(){
 }
 
 void HuskyHighlevelController::callback_(const sensor_msgs::LaserScan::ConstPtr& msg){
-    ROS_INFO_STREAM("Smallest distance measurement:" << msg->range_min);
+    int index=-1;
+    float angle = 0;
+    float min = msg->range_max;
+    float pi = 3.1415926535897;
+    for(int n=0; n < msg->ranges.size(); n++){
+        if(msg->ranges[n] < min){
+            index = n;
+            min = msg->ranges[n];
+        }
+    }
+    ROS_INFO_STREAM("Index of the smallest distance:" << index);
+    angle = msg->angle_min + index * msg->angle_increment;
+    angle = angle * 180 / pi;
+    ROS_INFO_STREAM("Angle of the smallest distance:" << angle);
+    ROS_INFO_STREAM("Smallest distance:" << min);
 }
 
 }
