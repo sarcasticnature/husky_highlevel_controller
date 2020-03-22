@@ -25,6 +25,8 @@ private:
     ros::Subscriber subscriber_;
     ros::Publisher publisher_;
     geometry_msgs::Twist twist_;
+    float speed_;
+    float yaw_;
     std::string topic_name_;
     int queue_size_;
 };

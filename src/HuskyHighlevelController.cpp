@@ -10,6 +10,9 @@ HuskyHighlevelController::HuskyHighlevelController(ros::NodeHandle& nodeHandle)
     if(subscriber_) ROS_INFO_STREAM("subscriber created, topic is: " << 
         subscriber_.getTopic());
     publisher_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+
+    speed_ = 1;
+    yaw_ = 0;
     stop_();
 }
 
@@ -25,7 +28,6 @@ void HuskyHighlevelController::readParameters_(){
 
 void HuskyHighlevelController::callback_(const sensor_msgs::LaserScan::ConstPtr& msg){
     int index=-1;
-    float angle = 0;
     float min = msg->range_max;
     float pi = 3.1415926535897;
     for(int n=0; n < msg->ranges.size(); n++){
@@ -34,11 +36,11 @@ void HuskyHighlevelController::callback_(const sensor_msgs::LaserScan::ConstPtr&
             min = msg->ranges[n];
         }
     }
-    ROS_INFO_STREAM("Index of the smallest distance:" << index);
-    angle = msg->angle_min + index * msg->angle_increment;
-    angle = angle * 180 / pi;
-    ROS_INFO_STREAM("Angle of the smallest distance:" << angle);
-    ROS_INFO_STREAM("Smallest distance:" << min);
+    yaw_ = msg->angle_min + index * msg->angle_increment;
+    ROS_INFO_STREAM("Heading: " << yaw_ * 180 / pi);
+    ROS_INFO_STREAM("Speed: " << speed_);
+    ROS_INFO_STREAM("Distance to object: " << min);
+    yaw_ *= -.25;
     forward_();
 }
 
@@ -53,12 +55,12 @@ void HuskyHighlevelController::stop_(){
 }
 
 void HuskyHighlevelController::forward_(){
-    twist_.linear.x = 1;
+    twist_.linear.x = speed_;
     twist_.linear.y = 0;
     twist_.linear.z = 0;
     twist_.angular.x = 0;
     twist_.angular.y = 0;
-    twist_.angular.z = 0;
+    twist_.angular.z = yaw_;
     publisher_.publish(twist_);
 }
 
