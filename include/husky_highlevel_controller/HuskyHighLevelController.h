@@ -23,12 +23,14 @@ private:
 
     ros::NodeHandle nh_;
     ros::Subscriber subscriber_;
+    std::string topic_name_;
+    int queue_size_;
+
     ros::Publisher publisher_;
     geometry_msgs::Twist twist_;
     float speed_;
     float yaw_;
-    std::string topic_name_;
-    int queue_size_;
+    float yaw_p_;
 };
 
 }
