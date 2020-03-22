@@ -3,6 +3,7 @@
 
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
+#include <geometry_msgs/Twist.h>
 #include <string>
 #include "husky_highlevel_controller/HuskyHighLevelController.h"
 
@@ -17,9 +18,13 @@ public:
 private:
     void readParameters_();
     void callback_(const sensor_msgs::LaserScan::ConstPtr& msg);
+    void stop_();
+    void forward_();
 
     ros::NodeHandle nh_;
     ros::Subscriber subscriber_;
+    ros::Publisher publisher_;
+    geometry_msgs::Twist twist_;
     std::string topic_name_;
     int queue_size_;
 };
