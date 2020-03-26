@@ -24,7 +24,7 @@
             file="$(find husky_highlevel_controller)/config/husky_control.yaml"/>
     </node>
     <node name="rviz" pkg="rviz" type="rviz"
-        args="-d $(find husky_highlevel_controller)/rviz/exercise2.rviz"/>
+        args="-d $(find husky_highlevel_controller)/rviz/exercise3.rviz"/>
 
 </launch>
 

@@ -1,5 +1,5 @@
 topic_name: "/scan"
 queue_size: 1
-speed: 1
+speed: .25
 yaw_p: .5
 
